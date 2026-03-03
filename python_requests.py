@@ -1,13 +1,11 @@
 import requests
 
 # --- 1. 환경 설정 ---
-API_KEY = "발급받으신_키를_여기에_넣으세요" # 매일 갱신해야 하는 그 키!
-GAME_NAME = "Hide on bush"
-TAG_LINE = "KR1"
+API_KEY = "RGAPI-4a3ce425-dd9e-413a-ac7f-9670d46641a6" # 매일 갱신해야 하는 그 키!
 
-def get_faker_latest_match():
+def get_latest_match(game_name : str, tag_line : str):
     # 공정 A: 계정명으로 PUUID(고유번호) 찾기
-    account_url = f"https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{GAME_NAME}/{TAG_LINE}?api_key={API_KEY}"
+    account_url = f"https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{game_name}/{tag_line}?api_key={API_KEY}"
     
     response = requests.get(account_url)
     
@@ -17,7 +15,7 @@ def get_faker_latest_match():
         return None
 
     puuid = response.json().get('puuid')
-    print(f"✅ 페이커 PUUID 확보: {puuid[:10]}...") # 보안상 앞부분만 출력
+    print(f"✅ PUUID 확보: {puuid[:10]}...") # 보안상 앞부분만 출력
 
     # 공정 B: 확보한 PUUID로 최근 경기 ID 딱 1개만 가져오기
     # asia 서버를 사용하며, count=1로 설정해 최신 경기만 타겟팅합니다.
@@ -39,9 +37,9 @@ def get_faker_latest_match():
     return None
 
 # 실행부
-faker_match_id = get_faker_latest_match()
+match_id = get_latest_match("Hide on bush","KR1")
 
-if faker_match_id:
+if match_id:
     print("-" * 30)
-    print(f"최종 결과값: {faker_match_id}")
+    print(f"최종 결과값: {match_id}")
     print("-" * 30)
